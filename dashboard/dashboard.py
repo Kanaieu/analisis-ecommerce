@@ -12,7 +12,7 @@ from streamlit_folium import st_folium
 sns.set(style='dark')
 
 # Helper function yang dibutuhkan untuk menyiapkan berbagai dataframe
-all_df = pd.read_csv("dashboard\\all_data.csv")
+all_df = pd.read_csv("https://raw.githubusercontent.com/Kanaieu/analisis-ecommerce/main/dashboard/all_data.csv")
 
 # Judul Dashboard
 st.title("Dashboard Analisis Revenue dan Keterlambatan Pengiriman dari e-commerce di Brazil")
