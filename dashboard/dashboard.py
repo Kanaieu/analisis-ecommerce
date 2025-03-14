@@ -81,16 +81,31 @@ st.pyplot(fig)
 st.subheader("Peta Kota dengan Rata-Rata Keterlambatan Pengiriman Tertinggi")
 st.write("Peta berikut menampilkan kota-kota dengan rata-rata waktu keterlambatan pengiriman tertinggi. Kota dengan warna merah lebih pekat menunjukkan waktu keterlambatan yang lebih tinggi. Disini hanya dicantumkan 20 kota yang memiliki rata rata delay tertinggi. Kota yang terlihat di peta mayoritas bukan kota besar")
 
-top_20_cities = all_df.nlargest(20, 'delivery_delay')
+# Filter berdasarkan rentang keterlambatan
+min_delay, max_delay = st.slider(
+    "Pilih Rentang Keterlambatan (dalam hari)", 
+    int(all_df['delivery_delay'].min()), 
+    int(all_df['delivery_delay'].max()), 
+    (int(all_df['delivery_delay'].min()), int(all_df['delivery_delay'].max()))
+)
+
+# Pilih jumlah maksimal data yang ingin ditampilkan
+num_cities = st.slider("Pilih jumlah kota yang ingin ditampilkan", 5, 50, 20)
+
+# Filter data sesuai rentang yang dipilih
+filtered_delay_df = all_df[(all_df['delivery_delay'] >= min_delay) & (all_df['delivery_delay'] <= max_delay)]
+
+# Batasi jumlah data agar tidak overload
+filtered_delay_df = filtered_delay_df.nlargest(num_cities, 'delivery_delay')
 
 # Mewarnai peta dengan warna sesuai dengan keterlambatan
-colormap = linear.YlOrRd_09.scale(top_20_cities['delivery_delay'].min(), top_20_cities['delivery_delay'].max())
+colormap = linear.YlOrRd_09.scale(filtered_delay_df['delivery_delay'].min(), filtered_delay_df['delivery_delay'].max())
 
 # Buat peta Brazil
 map_brazil = folium.Map(location=[-14.2350, -51.9253], zoom_start=4)
 
 # Tambahkan marker untuk 10 kota dengan keterlambatan tertinggi
-for index, row in top_20_cities.iterrows():
+for index, row in filtered_delay_df.iterrows():
     folium.CircleMarker(
         location=[row['geolocation_lat'], row['geolocation_lng']],
         radius=16, 
