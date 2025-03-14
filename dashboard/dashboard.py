@@ -90,7 +90,7 @@ min_delay, max_delay = st.slider(
 )
 
 # Pilih jumlah maksimal data yang ingin ditampilkan
-num_cities = st.slider("Pilih jumlah kota yang ingin ditampilkan", 5, 50, 20)
+num_cities = st.slider("Pilih jumlah kota yang ingin ditampilkan (Ditampilkan dari yang Tertinggi)", 5, 50, 20)
 
 # Filter data sesuai rentang yang dipilih
 filtered_delay_df = all_df[(all_df['delivery_delay'] >= min_delay) & (all_df['delivery_delay'] <= max_delay)]
